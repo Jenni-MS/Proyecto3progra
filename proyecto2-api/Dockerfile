@@ -25,6 +25,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 ENV PORT=10000
 EXPOSE 10000
 
-# Al arrancar: migra y siembra (el seeder tiene un guard que solo siembra
-# si la base está vacía, así nunca duplica datos), y levanta el servidor.
+# Al arrancar: migrate:fresh REINICIA el esquema desde cero (borra y recrea
+# todas las tablas) y siembra. Esto limpia el estado inconsistente que dejó
+# un deploy a medias. El guard del seeder evita duplicar datos.
 CMD php artisan migrate:fresh --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
