@@ -11,7 +11,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-      
+        // Evita volver a sembrar (y duplicar datos) si la base ya tiene películas.
+        // Así es seguro correr "--seed" en cada arranque del contenedor en Render.
+        if (Pelicula::count() > 0) {
+            return;
+        }
+
         // ─── Categorías ───────────────────────────────────────────
         $categorias = [
             ['nombre' => 'Acción',          'slug' => 'accion',          'icono' => 'fa-bolt'],
