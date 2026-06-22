@@ -21,6 +21,16 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction \
     && php artisan config:clear
 
+# Garantiza que existan las carpetas de cache/almacenamiento que Laravel
+# necesita escribir (vistas compiladas, cache, sesiones, logs) y permisos.
+RUN mkdir -p \
+        storage/framework/views \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/logs \
+        bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
 # Render inyecta el puerto en la variable $PORT
 ENV PORT=10000
 EXPOSE 10000
@@ -28,4 +38,4 @@ EXPOSE 10000
 # Al arrancar: migrate:fresh REINICIA el esquema desde cero (borra y recrea
 # todas las tablas) y siembra. Esto limpia el estado inconsistente que dejó
 # un deploy a medias. El guard del seeder evita duplicar datos.
-CMD php artisan migrate:fresh --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
+CMD php artisan migrate --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
