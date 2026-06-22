@@ -27,4 +27,4 @@ EXPOSE 10000
 
 # Al arrancar: migra y siembra (el seeder tiene un guard que solo siembra
 # si la base está vacía, así nunca duplica datos), y levanta el servidor.
-CMD php artisan migrate --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
+CMD php artisan migrate:fresh --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
