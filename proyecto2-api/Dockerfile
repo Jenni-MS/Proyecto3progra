@@ -25,7 +25,6 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 ENV PORT=10000
 EXPOSE 10000
 
-# Al arrancar: migra (idempotente) y levanta el servidor en el puerto de Render.
-# El seed se corre UNA sola vez a mano (ver instrucciones), no aquí,
-# para no duplicar datos en cada reinicio.
-CMD php artisan migrate --force && php artisan serve --host 0.0.0.0 --port ${PORT}
+# Al arrancar: migra y siembra (el seeder tiene un guard que solo siembra
+# si la base está vacía, así nunca duplica datos), y levanta el servidor.
+CMD php artisan migrate --force --seed && php artisan serve --host 0.0.0.0 --port ${PORT}
